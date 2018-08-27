@@ -44,6 +44,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.cellDescription.text = desc
         return cell
     }
+    
     func addNewReminder(title: String, description: String) {
         titles.append(title)
         descriptions.append(description)
