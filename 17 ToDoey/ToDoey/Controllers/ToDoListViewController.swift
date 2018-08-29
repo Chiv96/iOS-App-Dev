@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListViewController: UITableViewController {
 
@@ -15,6 +16,7 @@ class ToDoListViewController: UITableViewController {
     //2 let defaults = UserDefaults.standard
     
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +37,7 @@ class ToDoListViewController: UITableViewController {
 //           itemArray = items
 //        }
         loadItems()
-}
+    }
     
     //Table View Data Source Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,7 +58,11 @@ class ToDoListViewController: UITableViewController {
     //Table View Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-        itemArray[indexPath.row].done = !(itemArray[indexPath.row].done)
+        ßitemArray[indexPath.row].done = !(itemArray[indexPath.row].done)
+        //can even do itemArray[indexPath.row].setValue()
+        
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
         saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -68,13 +74,14 @@ class ToDoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what happends when user clicks "Add Item"
             
-            let newItem = Item()
+            let newItem = Item(context: self.context)
             newItem.title = textField.text!
+            newItem.done = false
             self.itemArray.append(newItem)
            //2 self.defaults.set(self.itemArray, forKey: "ToDoListArray")
-            
             self.saveItems()    //whenever inside closure, use keyword "self"
         }
+        
         alert.addTextField { (alertTextField) in
             //the alertTextField is created locally inside this closure
             alertTextField.placeholder = "Create new item"
@@ -86,10 +93,8 @@ class ToDoListViewController: UITableViewController {
     }
     
     func saveItems() {
-        let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
             print("Encoding Error")
         }
@@ -97,13 +102,11 @@ class ToDoListViewController: UITableViewController {
     }
     
     func loadItems() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-                itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding")
-            }
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching request")
         }
     }
     
