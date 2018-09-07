@@ -16,6 +16,7 @@ class ToDoListViewController: UITableViewController {
     //2 let defaults = UserDefaults.standard
     
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
@@ -58,7 +59,7 @@ class ToDoListViewController: UITableViewController {
     //Table View Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-        ßitemArray[indexPath.row].done = !(itemArray[indexPath.row].done)
+        itemArray[indexPath.row].done = !(itemArray[indexPath.row].done)
         //can even do itemArray[indexPath.row].setValue()
         
 //        context.delete(itemArray[indexPath.row])

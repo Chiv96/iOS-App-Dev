@@ -44,7 +44,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate, Change
         
         locationManager.startUpdatingLocation()
             //background ie asynch. After finding location, it will send
-            //back to this vide controller as it is the delegate
+            //back to this view controller as it is the delegate
         
         
     }

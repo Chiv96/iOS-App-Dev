@@ -55,7 +55,7 @@ class ViewController: UIViewController {
             questionLabel.text = allQuestions.list[questionNumber].questionText
         }
         else {
-            let alert = UIAlertController(title: "Awesome!", message: "Would you like to start over?", preferredStyle: .alert)/Users/chivonne.reji/Downloads/ProgressHUD-master
+            let alert = UIAlertController(title: "Awesome!", message: "Would you like to start over?", preferredStyle: .alert)
             
             let restartAction = UIAlertAction(title: "Restart", style: .default) {(action: UIAlertAction!) in self.startOver()}
             
